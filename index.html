@@ -1,0 +1,228 @@
+
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d0b">
+  <meta name="description" content="XanisxHex Gateway — Mona Control Center">
+  <title>XanisxHex Gateway</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div id="authView" class="auth-layout">
+    <div class="auth-brand">
+      <a class="brand" href="/">
+        <span class="brand-mark">X</span>
+        XANISXHEX<span class="brand-muted">.GATEWAY</span>
+      </a>
+      <div class="auth-hero">
+        <span class="eyebrow"><i class="dot"></i> MONA CONTROL CENTER</span>
+        <h1>One gateway.<br><span>More control.</span></h1>
+        <p>Kelola integrasi dan pantau layanan dalam satu ruang kerja.</p>
+        <div class="auth-foot">DARK EMERALD EDITION <span>·</span> 2026</div>
+      </div>
+    </div>
+
+    <section class="auth-card">
+      <div class="auth-card-head">
+        <div class="brand-mark small-mark">X</div>
+        <span class="eyebrow">ACCOUNT ACCESS</span>
+      </div>
+      <h2 id="authTitle">Selamat datang kembali.</h2>
+      <p id="authSubtitle" class="muted">
+        Masuk untuk membuka dashboard kamu.
+      </p>
+
+      <form id="loginForm" class="form">
+        <label>Email
+          <input name="email" type="email" autocomplete="email"
+            placeholder="nama@email.com" required>
+        </label>
+        <label>Password
+          <input name="password" type="password"
+            autocomplete="current-password" required>
+        </label>
+        <button class="btn primary full" type="submit">Masuk ke dashboard <span>↗</span></button>
+      </form>
+
+      <form id="signupForm" class="form" hidden>
+        <label>Email
+          <input name="email" type="email" autocomplete="email"
+            placeholder="nama@email.com" required>
+        </label>
+        <label>Password <span class="muted">· minimal 10 karakter</span>
+          <input name="password" type="password"
+            autocomplete="new-password" minlength="10" required>
+        </label>
+        <button class="btn primary full" type="submit">Buat akun <span>↗</span></button>
+      </form>
+
+      <button id="switchAuth" class="switch-btn">Belum punya akun? Daftar</button>
+      <p id="authMessage" class="message" role="status" aria-live="polite"></p>
+      <div class="auth-disclaimer">Akun publik tidak otomatis mendapat akses ke bot Mona.</div>
+    </section>
+  </div>
+
+  <div id="appView" class="app-shell" hidden>
+    <aside id="sidebar" class="sidebar">
+      <a class="brand sidebar-brand" href="#">
+        <span class="brand-mark">X</span>
+        XANISXHEX<span class="brand-muted">.GX</span>
+      </a>
+
+      <div class="workspace">
+        <div class="workspace-icon">M</div>
+        <div class="workspace-text">
+          <strong>Mona Workspace</strong>
+          <span>Personal workspace</span>
+        </div>
+        <span class="chevron">⌄</span>
+      </div>
+
+      <div class="side-label">WORKSPACE</div>
+      <nav class="side-nav">
+        <a class="nav-item active" href="#overview" data-page="overview">
+          <span class="nav-icon">▦</span> Overview
+        </a>
+        <a class="nav-item" href="#analytics" data-page="analytics">
+          <span class="nav-icon">⌁</span> Analytics
+          <span class="nav-soon">DEMO</span>
+        </a>
+        <a class="nav-item" href="#activity" data-page="activity">
+          <span class="nav-icon">≡</span> Activity logs
+        </a>
+      </nav>
+
+      <div class="side-label">DEVELOPERS</div>
+      <nav class="side-nav">
+        <a class="nav-item disabled-link" href="#integrations" data-page="integrations">
+          <span class="nav-icon">⌘</span> Integrations
+          <span class="nav-soon">SOON</span>
+        </a>
+        <a class="nav-item disabled-link" href="#api" data-page="api">
+          <span class="nav-icon">‹ ›</span> API reference
+          <span class="nav-soon">SOON</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="connection-card">
+          <span class="status-dot offline"></span>
+          <div><strong>Mona connection</strong><span>Not connected</span></div>
+        </div>
+        <button id="sidebarLogout" class="nav-item logout-btn">
+          <span class="nav-icon">↪</span> Sign out
+        </button>
+        <div class="sidebar-version">XANISXHEX GATEWAY <span>v0.1.0</span></div>
+      </div>
+    </aside>
+
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button id="menuToggle" class="icon-btn mobile-only" aria-label="Buka menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb">Overview</strong></div>
+        <div class="topbar-right">
+          <span class="env-tag"><i></i> PREVIEW</span>
+          <button class="avatar" id="avatarBtn" aria-label="Akun pengguna">U</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="page-overview" class="page">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">MONDAY, YOUR WORKSPACE</div>
+              <h1>Overview<span class="title-period">.</span></h1>
+              <p class="muted">Ringkasan workspace XanisxHex kamu.</p>
+            </div>
+            <span class="demo-pill"><i></i> DEMO DATA</span>
+          </div>
+
+          <div class="notice">
+            <span class="notice-icon">i</span>
+            <div><strong>Bot belum terhubung</strong><p>Dashboard sudah siap. Statistik di bawah hanya contoh dan bukan data asli Mona.</p></div>
+          </div>
+
+          <div class="stat-grid">
+            <article class="stat-card">
+              <div class="stat-top"><span>Total requests</span><span class="stat-icon">↗</span></div>
+              <div class="stat-number">—</div>
+              <div class="stat-foot">Menunggu integrasi API</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Messages sent</span><span class="stat-icon">⇧</span></div>
+              <div class="stat-number">—</div>
+              <div class="stat-foot">Belum ada data terhubung</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Success rate</span><span class="stat-icon">✓</span></div>
+              <div class="stat-number">—</div>
+              <div class="stat-foot">Belum tersedia</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Bot status</span><span class="stat-icon">◉</span></div>
+              <div class="stat-number status-text">Unknown</div>
+              <div class="stat-foot"><i class="status-dot offline"></i> Not connected</div>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel chart-panel">
+              <div class="panel-heading">
+                <div><h2>Request activity</h2><p class="muted">Contoh visualisasi, bukan trafik aktual</p></div>
+                <span class="range-tag">7 DAYS · DEMO</span>
+              </div>
+              <div class="chart-legend"><span><i></i> Demo requests</span></div>
+              <div class="chart-wrap">
+                <canvas id="activityChart" aria-label="Grafik contoh aktivitas tujuh hari" role="img"></canvas>
+              </div>
+              <div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            </section>
+
+            <section class="panel system-panel">
+              <div class="panel-heading"><div><h2>System status</h2><p class="muted">Status integrasi</p></div></div>
+              <div class="system-row"><span class="system-icon">W</span><div><strong>Website</strong><span>Dashboard frontend</span></div><b class="state-ready">READY</b></div>
+              <div class="system-row"><span class="system-icon">A</span><div><strong>Authentication</strong><span id="authState">Checking…</span></div><b id="authBadge" class="state-ready">AUTH</b></div>
+              <div class="system-row"><span class="system-icon">M</span><div><strong>Mona Bot</strong><span>External panel</span></div><b class="state-offline">UNLINKED</b></div>
+            </section>
+          </div>
+
+          <section class="panel activity-panel">
+            <div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Aktivitas yang tersedia di dashboard</p></div><span class="range-tag">LOCAL</span></div>
+            <div class="empty-state"><span class="empty-icon">≡</span><strong>Belum ada aktivitas bot</strong><p>Log akan muncul setelah integrasi backend ditambahkan.</p></div>
+          </section>
+        </section>
+
+        <section id="page-analytics" class="page" hidden>
+          <div class="page-heading"><div><div class="eyebrow">WORKSPACE / METRICS</div><h1>Analytics<span class="title-period">.</span></h1><p class="muted">Visualisasi contoh menunggu sumber data asli.</p></div></div>
+          <div class="notice"><span class="notice-icon">i</span><div><strong>Analytics belum aktif</strong><p>Grafik contoh tidak menunjukkan permintaan atau pesan WhatsApp nyata.</p></div></div>
+          <section class="panel chart-panel"><div class="panel-heading"><div><h2>Request activity</h2><p class="muted">Demo visualization</p></div></div><div class="chart-wrap large-chart"><canvas id="analyticsChart" aria-label="Grafik demo" role="img"></canvas></div></section>
+        </section>
+
+        <section id="page-activity" class="page" hidden>
+          <div class="page-heading"><div><div class="eyebrow">WORKSPACE / LOGS</div><h1>Activity logs<span class="title-period">.</span></h1><p class="muted">Catatan aktivitas integrasi.</p></div></div>
+          <section class="panel activity-panel"><div class="empty-state"><span class="empty-icon">≡</span><strong>Belum ada log</strong><p>Log Mona belum tersedia karena server bot belum terhubung.</p></div></section>
+        </section>
+
+        <section id="page-integrations" class="page" hidden>
+          <div class="page-heading"><div><div class="eyebrow">DEVELOPERS / CONNECTIONS</div><h1>Integrations<span class="title-period">.</span></h1></div></div>
+          <section class="panel placeholder-panel"><span class="placeholder-icon">⌘</span><h2>Integrasi belum tersedia</h2><p class="muted">Koneksi ke Reviactryl perlu API penghubung yang aman.</p></section>
+        </section>
+
+        <section id="page-api" class="page" hidden>
+          <div class="page-heading"><div><div class="eyebrow">DEVELOPERS / DOCUMENTATION</div><h1>API reference<span class="title-period">.</span></h1></div></div>
+          <section class="panel placeholder-panel"><span class="placeholder-icon">‹ ›</span><h2>API belum diterbitkan</h2><p class="muted">Tidak ada endpoint pengiriman pesan yang aktif pada versi ini.</p></section>
+        </section>
+
+        <footer class="app-footer"><span>© 2026 XanisxHex Gateway</span><span>Secure workspace <i class="dot"></i></span></footer>
+      </div>
+    </main>
+  </div>
+</body>
+          </html>
+  
